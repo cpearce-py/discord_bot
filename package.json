@@ -11,7 +11,9 @@
   "dependencies": {
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
+    "ngrok": "^3.2.7",
     "twitch": "^4.0.9",
-    "twitch-chat-client": "^4.0.9"
+    "twitch-chat-client": "^4.0.9",
+    "twitch-webhooks": "^4.0.10"
   }
 }
