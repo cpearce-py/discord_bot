@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "My Discord Bot",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,4 +17,5 @@
     "twitch-chat-client": "^4.0.9",
     "twitch-webhooks": "^4.0.10"
   }
+
 }
