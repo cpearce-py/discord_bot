@@ -1,3 +1,4 @@
+
 require('dotenv').config();
 
 const ngrok = require('ngrok');
@@ -13,51 +14,66 @@ const bot = new Discord.Client();
 const token = process.env.BOT_TOKEN;
 const prefix = '$';
 
-// bot.login(token);
+bot.login(token);
 
-// bot.once('ready', () => {
-//     console.log(`Logged in as ${bot.user.tag}!`);
-
-// });
-
-
-
-
+bot.once('ready', () => {
+    console.log(`Bot loged in as ${bot.user.tag}!`);
+});
 
 async function streamWebhook(client){
     try {
         const listener = await WebHookListener.create(client, {
-        hostName: '2a3c4af71731.ngrok.io',
+        hostName: 'fde34306ca03.ngrok.io',
         port: 8000,
         reverseProxy: {  port:  443, ssl: true }
         });
 
         listener.listen();
 
+
+
         const myUser = await client.helix.users.getUserByName('citotester');
         console.log(`user is: ${myUser.id}`)
 
-        const stream = await client.helix.streams.getStreamByUserId(myUser);
+        let stream = await client.helix.streams.getStreamByUserId(myUser);
 
+        let prevStream = null
         const subscription = await listener.subscribeToStreamChanges(myUser, async (stream) => {
             if (stream) {
-                console.log(`${streamID.userDisplayName} just went live with title: ${stream.title}`);
+                if (!prevStream) {
+                    console.log(`${stream.userDisplayName} just went live with title: ${stream.title}`);
+
+                }
             } else {
                 const user = await client.helix.users.getUserById(myUser);
                 console.log(`${user.displayName} just went offline`);
-            } }, 100000); 
+            }
+            prevStream = stream
+        }
+    );
+    return subscription
 
-        
     } catch (err) {
-
         console.log(err)
     }
 
 
 };
 
+async function sendMessage(client, stream){
+    const user = `${stream.userDisplayName}`
+    const title = `${user} just went live!!`
+    const url = `twitch.tv/${user}`
+
+    const embed = new Discord.MessageEmbed()
+        .setTitle(title)
+        .setColor('#0099ff')
+        .setURL(url)
+
+}
+let rep = streamWebhook(client);
 
 
-streamWebhook(client);
+console.log('Subscription =', rep);
 
 
